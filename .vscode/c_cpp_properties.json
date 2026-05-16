@@ -1,0 +1,41 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/jazzy/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section2_Setup/bumperbot_ws/src/bumperbot_controller/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section2_Setup/bumperbot_ws/src/bumperbot_cpp_examples/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section2_Setup/bumperbot_ws/src/bumperbot_firmware/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section2_Setup/bumperbot_ws/src/bumperbot_localization/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section2_Setup/bumperbot_ws/src/bumperbot_mapping/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section2_Setup/bumperbot_ws/src/bumperbot_motion/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section2_Setup/bumperbot_ws/src/bumperbot_planning/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section3_Introduction_to_ROS_2/bumperbot_ws/src/bumperbot_controller/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section3_Introduction_to_ROS_2/bumperbot_ws/src/bumperbot_cpp_examples/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section3_Introduction_to_ROS_2/bumperbot_ws/src/bumperbot_firmware/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section3_Introduction_to_ROS_2/bumperbot_ws/src/bumperbot_localization/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section3_Introduction_to_ROS_2/bumperbot_ws/src/bumperbot_mapping/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section3_Introduction_to_ROS_2/bumperbot_ws/src/bumperbot_motion/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section3_Introduction_to_ROS_2/bumperbot_ws/src/bumperbot_planning/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section4_Image_Formation/bumperbot_ws/src/bumperbot_controller/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section4_Image_Formation/bumperbot_ws/src/bumperbot_cpp_examples/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section4_Image_Formation/bumperbot_ws/src/bumperbot_firmware/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section4_Image_Formation/bumperbot_ws/src/bumperbot_localization/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section4_Image_Formation/bumperbot_ws/src/bumperbot_mapping/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section4_Image_Formation/bumperbot_ws/src/bumperbot_motion/include/**",
+        "/home/alien/Code/Self-Driving-and-ROS-2-Learn-by-Doing-Perception-Vision/Section4_Image_Formation/bumperbot_ws/src/bumperbot_planning/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ros2",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++17"
+    }
+  ],
+  "version": 4
+}
