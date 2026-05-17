@@ -12,7 +12,7 @@ UndistortImage::UndistortImage(const std::string & name) : Node(name)
   const auto sensor_data_qos = rclcpp::SensorDataQoS();
 
   // Declare parameters
-  camera_name_ = declare_parameter("camera_name", "left_camera");
+  camera_name_ = declare_parameter("camera_name", "camera");
   get_parameter("camera_name", camera_name_);
 
   image_sub_ = create_subscription<sensor_msgs::msg::Image>(

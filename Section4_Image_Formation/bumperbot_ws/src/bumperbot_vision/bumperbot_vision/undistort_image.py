@@ -13,7 +13,7 @@ class UndistortImage(Node):
         super().__init__('undistort_image')
 
         # Declare parameters
-        self.declare_parameter('camera_name', 'left_camera')
+        self.declare_parameter('camera_name', 'camera')
         self.camera_name_ = self.get_parameter('camera_name').get_parameter_value().string_value
 
         # Initialize helpers
