@@ -1,0 +1,58 @@
+cmake_minimum_required(VERSION 3.8)
+project(bumperbot_vision)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(image_transport REQUIRED)
+find_package(image_transport_plugins REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
+find_package(image_geometry REQUIRED)
+find_package(OpenCV REQUIRED)
+
+set(dependencies
+  rclcpp
+  image_transport
+  image_transport_plugins
+  sensor_msgs
+  cv_bridge
+  image_geometry
+  OpenCV
+)
+
+ament_python_install_package(${PROJECT_NAME})
+
+include_directories(
+  include
+  ${OpenCV_INCLUDE_DIRS}
+)
+
+add_executable(undistort_image
+  src/undistort_image.cpp
+)
+ament_target_dependencies(undistort_image ${dependencies})
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  set(ament_cmake_copyright_FOUND TRUE)
+  set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+install(TARGETS
+  undistort_image
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(PROGRAMS
+  ${PROJECT_NAME}/undistort_image.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+ament_export_dependencies(${dependencies})
+ament_package()
