@@ -19,6 +19,7 @@ class UndistortImage(Node):
         # Initialize helpers
         self.bridge = CvBridge()
         self.model = PinholeCameraModel()
+        self.camera_info = None
 
         image_sub = self.create_subscription(
             Image, 
@@ -42,7 +43,6 @@ class UndistortImage(Node):
             qos_profile_sensor_data
         )
 
-        self.camera_info = None
         self.get_logger().info(f'Undistort node started for {self.camera_name_}')
 
     def image_info_callback(self, info_msg):

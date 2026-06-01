@@ -37,6 +37,11 @@ add_executable(undistort_image
 )
 ament_target_dependencies(undistort_image ${dependencies})
 
+add_executable(image_processing
+  src/image_processing.cpp
+)
+ament_target_dependencies(image_processing ${dependencies})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
@@ -46,11 +51,13 @@ endif()
 
 install(TARGETS
   undistort_image
+  image_processing
   DESTINATION lib/${PROJECT_NAME}
 )
 
 install(PROGRAMS
   ${PROJECT_NAME}/undistort_image.py
+  ${PROJECT_NAME}/image_processing.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
