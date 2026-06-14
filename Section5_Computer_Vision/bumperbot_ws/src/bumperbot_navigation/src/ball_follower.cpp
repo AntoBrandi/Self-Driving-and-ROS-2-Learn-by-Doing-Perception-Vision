@@ -12,7 +12,7 @@ BallFollower::BallFollower(const std::string & name) : Node(name)
   declare_parameter("lower_hsv", std::vector<int64_t>{79, 50, 50});
   declare_parameter("upper_hsv", std::vector<int64_t>{99, 255, 255});
   declare_parameter("ball_radius", 0.31);
-  declare_parameter("camera_name", "left_camera");
+  declare_parameter("camera_name", "camera");
   get_parameter("lower_hsv", lower_hsv_);
   get_parameter("upper_hsv", upper_hsv_);
   get_parameter("ball_radius", ball_radius_);

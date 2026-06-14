@@ -19,7 +19,7 @@ class BallFollower(Node):
         self.declare_parameter('lower_hsv', [79, 50, 50])
         self.declare_parameter('upper_hsv', [99, 255, 255])
         self.declare_parameter('ball_radius', 0.31)
-        self.declare_parameter('camera_name', 'left_camera')
+        self.declare_parameter('camera_name', 'camera')
         self.lower_hsv = self.get_parameter('lower_hsv').value
         self.upper_hsv = self.get_parameter('upper_hsv').value
         self.ball_radius = self.get_parameter('ball_radius').value
@@ -61,11 +61,7 @@ class BallFollower(Node):
             return
         
         # Convert ROS Image to OpenCV format
-        try:
-            cv_image = self.bridge.imgmsg_to_cv2(image_msg, desired_encoding='bgr8')
-        except Exception as e:
-            self.get_logger().error(f"CvBridge Error: {e}")
-            return
+        cv_image = self.bridge.imgmsg_to_cv2(image_msg, desired_encoding='bgr8')
             
         # Convert to HSV
         hsv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
