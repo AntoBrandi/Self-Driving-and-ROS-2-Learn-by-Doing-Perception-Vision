@@ -20,7 +20,7 @@ BallFollower::BallFollower(const std::string & name) : Node(name)
 
   const auto sensor_data_qos = rclcpp::SensorDataQoS();
   image_sub_ = create_subscription<sensor_msgs::msg::Image>(
-    camera_name_ + "/image_raw", sensor_data_qos, std::bind(&BallFollower::imageCallback, this, _1));
+    camera_name_ + "/image_rect", sensor_data_qos, std::bind(&BallFollower::imageCallback, this, _1));
   info_sub_= create_subscription<sensor_msgs::msg::CameraInfo>(
     camera_name_ + "/camera_info", sensor_data_qos, std::bind(&BallFollower::imageInfoCallback, this, _1));
 

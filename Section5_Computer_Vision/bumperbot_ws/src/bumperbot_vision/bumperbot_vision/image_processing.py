@@ -28,7 +28,7 @@ class ImageProcessing(Node):
 
         image_sub = self.create_subscription(
             Image, 
-            f'{self.camera_name_}/image_raw',
+            f'{self.camera_name_}/image_rect',
             self.image_callback,
             qos_profile_sensor_data,
         )
@@ -76,6 +76,12 @@ class ImageProcessing(Node):
         # h_channel, s_channel, v_channel = cv2.split(hsv_image)
         # # Pick which channel to display: h_channel, s_channel, or v_channel
         # processed_image = v_channel
+        
+        # # Full color imahe using HSV
+        # full_saturation = np.full_like(s_channel, 255)
+        # full_value = np.full_like(v_channel, 255)
+        # hue_colorized = cv2.merge([h_channel, full_saturation, full_value])
+        # processed_image = cv2.cvtColor(hue_colorized, cv2.COLOR_HSV2BGR)
  
         # ============================================================
         # LAB — Blurring
@@ -141,28 +147,28 @@ class ImageProcessing(Node):
         # ============================================================
  
         # # Find contours in the clean mask
-        processed_image = cv_image
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        # processed_image = cv_image
+        # contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
-        if contours:
-            # Find the largest contour by area
-            largest_contour = max(contours, key=cv2.contourArea)
+        # if contours:
+        #     # Find the largest contour by area
+        #     largest_contour = max(contours, key=cv2.contourArea)
         
-            # Get the minimum enclosing circle — center and radius
-            ((x, y), radius) = cv2.minEnclosingCircle(largest_contour)
+        #     # Get the minimum enclosing circle — center and radius
+        #     ((x, y), radius) = cv2.minEnclosingCircle(largest_contour)
         
-            # Only process if the detected object is big enough
-            if radius > 10.0:
-                # Get the bounding rectangle
-                x_rect, y_rect, w, h = cv2.boundingRect(largest_contour)
+        #     # Only process if the detected object is big enough
+        #     if radius > 10.0:
+        #         # Get the bounding rectangle
+        #         x_rect, y_rect, w, h = cv2.boundingRect(largest_contour)
         
-                # Draw the bounding box (green)
-                cv2.rectangle(processed_image, (x_rect, y_rect),
-                              (x_rect + w, y_rect + h), (0, 255, 0), 2)
+        #         # Draw the bounding box (green)
+        #         cv2.rectangle(processed_image, (x_rect, y_rect),
+        #                       (x_rect + w, y_rect + h), (0, 255, 0), 2)
         
-                # Draw the center point (red, filled)
-                cv2.circle(processed_image, (int(x), int(y)), 3,
-                           (0, 0, 255), -1)
+        #         # Draw the center point (red, filled)
+        #         cv2.circle(processed_image, (int(x), int(y)), 3,
+        #                    (0, 0, 255), -1)
  
         processed_image_msg = self.bridge.cv2_to_imgmsg(processed_image, encoding='passthrough')
         processed_image_msg.header = image_msg.header

@@ -21,7 +21,7 @@ ImageProcessing::ImageProcessing(const std::string & name) : Node(name)
   get_parameter("upper_hsv", upper_hsv_);
 
   image_sub_ = create_subscription<sensor_msgs::msg::Image>(
-    camera_name_ + "/image_raw", sensor_data_qos, std::bind(&ImageProcessing::imageCallback, this, _1));
+    camera_name_ + "/image_rect", sensor_data_qos, std::bind(&ImageProcessing::imageCallback, this, _1));
   info_sub_= create_subscription<sensor_msgs::msg::CameraInfo>(
     camera_name_ + "/camera_info", sensor_data_qos, std::bind(&ImageProcessing::imageInfoCallback, this, _1));
 }
@@ -62,6 +62,14 @@ void ImageProcessing::imageCallback(
   // cv::split(hsv_image, channels);
   // // Pick which channel to display: channels[0]=H, channels[1]=S, channels[2]=V
   // processed_image = channels[2];
+
+  // cv::Mat full_saturation(hsv_image.size(), CV_8UC1, cv::Scalar(255));
+  // cv::Mat full_value(hsv_image.size(), CV_8UC1, cv::Scalar(255));
+
+  // cv::Mat hue_colorized;
+  // std::vector<cv::Mat> hue_channels = {channels[0], full_saturation, full_value};
+  // cv::merge(hue_channels, hue_colorized);
+  // cv::cvtColor(hue_colorized, processed_image, cv::COLOR_HSV2BGR);
  
   // ============================================================
   // LAB — Blurring
@@ -106,57 +114,57 @@ void ImageProcessing::imageCallback(
   // ============================================================
  
   // // Convert to HSV
-  cv::Mat hsv_image;
-  cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
+  // cv::Mat hsv_image;
+  // cv::cvtColor(image, hsv_image, cv::COLOR_BGR2HSV);
  
-  // Create a mask using the HSV color range
-  cv::Scalar lower_bound(lower_hsv_[0], lower_hsv_[1], lower_hsv_[2]);
-  cv::Scalar upper_bound(upper_hsv_[0], upper_hsv_[1], upper_hsv_[2]);
-  cv::Mat mask;
-  cv::inRange(hsv_image, lower_bound, upper_bound, mask);
+  // // Create a mask using the HSV color range
+  // cv::Scalar lower_bound(lower_hsv_[0], lower_hsv_[1], lower_hsv_[2]);
+  // cv::Scalar upper_bound(upper_hsv_[0], upper_hsv_[1], upper_hsv_[2]);
+  // cv::Mat mask;
+  // cv::inRange(hsv_image, lower_bound, upper_bound, mask);
  
-  // Morphological Opening — removes small background noise
-  cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
-  cv::morphologyEx(mask, mask, cv::MORPH_OPEN, kernel, cv::Point(-1, -1), 2);
+  // // Morphological Opening — removes small background noise
+  // cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
+  // cv::morphologyEx(mask, mask, cv::MORPH_OPEN, kernel, cv::Point(-1, -1), 2);
  
-  // Morphological Closing — fills holes and gaps inside the object
-  cv::morphologyEx(mask, mask, cv::MORPH_CLOSE, kernel, cv::Point(-1, -1), 5);
+  // // Morphological Closing — fills holes and gaps inside the object
+  // cv::morphologyEx(mask, mask, cv::MORPH_CLOSE, kernel, cv::Point(-1, -1), 5);
  
-  processed_image = mask;
+  // processed_image = mask;
  
   // ============================================================
   // LAB — Contour Detection
   // ============================================================
  
   // // Find contours in the clean mask
-  processed_image = image;
-  std::vector<std::vector<cv::Point>> contours;
-  cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+  // processed_image = image;
+  // std::vector<std::vector<cv::Point>> contours;
+  // cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
  
-  if (!contours.empty()) {
-    // Find the largest contour by area
-    auto largest_contour = std::max_element(contours.begin(), contours.end(),
-      [](const std::vector<cv::Point> & a, const std::vector<cv::Point> & b) {
-        return cv::contourArea(a) < cv::contourArea(b);
-      });
+  // if (!contours.empty()) {
+  //   // Find the largest contour by area
+  //   auto largest_contour = std::max_element(contours.begin(), contours.end(),
+  //     [](const std::vector<cv::Point> & a, const std::vector<cv::Point> & b) {
+  //       return cv::contourArea(a) < cv::contourArea(b);
+  //     });
  
-    // Get the minimum enclosing circle — center and radius
-    cv::Point2f center;
-    float radius;
-    cv::minEnclosingCircle(*largest_contour, center, radius);
+  //   // Get the minimum enclosing circle — center and radius
+  //   cv::Point2f center;
+  //   float radius;
+  //   cv::minEnclosingCircle(*largest_contour, center, radius);
  
-    // Only process if the detected object is big enough
-    if (radius > 10.0f) {
-      // Get the bounding rectangle
-      cv::Rect bbox = cv::boundingRect(*largest_contour);
+  //   // Only process if the detected object is big enough
+  //   if (radius > 10.0f) {
+  //     // Get the bounding rectangle
+  //     cv::Rect bbox = cv::boundingRect(*largest_contour);
  
-      // Draw the bounding box (green)
-      cv::rectangle(processed_image, bbox, cv::Scalar(0, 255, 0), 2);
+  //     // Draw the bounding box (green)
+  //     cv::rectangle(processed_image, bbox, cv::Scalar(0, 255, 0), 2);
  
-      // Draw the center point (red, filled)
-      cv::circle(processed_image, center, 3, cv::Scalar(0, 0, 255), -1);
-    }
-  }
+  //     // Draw the center point (red, filled)
+  //     cv::circle(processed_image, center, 3, cv::Scalar(0, 0, 255), -1);
+  //   }
+  // }
 
   auto processed_image_msg =
     cv_bridge::CvImage(image_msg->header, sensor_msgs::image_encodings::BGR8, processed_image).toImageMsg();

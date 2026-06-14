@@ -30,7 +30,7 @@ class BallFollower(Node):
         
         image_sub = self.create_subscription(
             Image, 
-            f'{self.camera_name}/image_raw',
+            f'{self.camera_name}/image_rect',
             self.image_callback,
             qos_profile_sensor_data,
         )
