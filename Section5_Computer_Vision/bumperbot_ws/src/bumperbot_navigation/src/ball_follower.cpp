@@ -25,7 +25,7 @@ BallFollower::BallFollower(const std::string & name) : Node(name)
     camera_name_ + "/camera_info", sensor_data_qos, std::bind(&BallFollower::imageInfoCallback, this, _1));
 
   detection_pub_ =
-    image_transport::create_publisher(this, "left_camera/ball_detection", rmw_qos_profile_sensor_data);
+    image_transport::create_publisher(this, camera_name_ + "/ball_detection", rmw_qos_profile_sensor_data);
   ball_pose_pub_ = create_publisher<geometry_msgs::msg::PoseStamped>("goal_update", 10);
 }
 

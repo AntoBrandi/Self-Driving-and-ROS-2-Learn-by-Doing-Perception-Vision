@@ -234,6 +234,14 @@
     <origin xyz="0.05 0.03 0.095" rpy="0.0 -0.35 0.0"/>
   </joint>
 
+  <link name="camera_optical_link"/>
+  
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_optical_link"/>
+    <origin xyz="0 0 0" rpy="-1.571 0 -1.571"/>
+  </joint>
+
   <material name="blue">
     <color rgba="0 0 1 1"/>
   </material>
