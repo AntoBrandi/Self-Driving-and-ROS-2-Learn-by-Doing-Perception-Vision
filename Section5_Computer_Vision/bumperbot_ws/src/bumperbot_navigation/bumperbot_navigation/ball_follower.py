@@ -45,8 +45,8 @@ class BallFollower(Node):
         self.image_transport = ImageTransport(
             'imagetransport_pub', image_transport='compressed'
         )
-        self.img_pub = self.image_transport.advertise(
-            f'{self.camera_name_}/ball_detection',
+        self.detection_pub = self.image_transport.advertise(
+            f'{self.camera_name}/ball_detection',
             qos_profile_sensor_data
         )
 
