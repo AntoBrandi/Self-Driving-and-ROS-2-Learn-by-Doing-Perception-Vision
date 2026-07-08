@@ -28,6 +28,7 @@ public:
   StereoVision(const std::string & name);
 
 private:
+  std::unique_ptr<image_transport::ImageTransport> it_;
   image_transport::SubscriberFilter left_image_sub_, right_image_sub_;
   message_filters::Subscriber<sensor_msgs::msg::CameraInfo> left_info_sub_, right_info_sub_;
   using ApproximatePolicy = message_filters::sync_policies::ApproximateTime<
@@ -47,9 +48,6 @@ private:
     const sensor_msgs::msg::CameraInfo::ConstSharedPtr & l_info_msg,
     const sensor_msgs::msg::Image::ConstSharedPtr & r_image_msg,
     const sensor_msgs::msg::CameraInfo::ConstSharedPtr & r_info_msg);
-
-  rcl_interfaces::msg::SetParametersResult onSetParameters(const std::vector<rclcpp::Parameter> & parameters);
-  OnSetParametersCallbackHandle::SharedPtr on_set_parameters_callback_handle_;
 
   // Stereo Matcher Parameters
   struct SGBMParams {
