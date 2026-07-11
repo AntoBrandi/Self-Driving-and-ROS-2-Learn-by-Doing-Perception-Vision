@@ -53,6 +53,11 @@ add_executable(stereo_vision
 )
 ament_target_dependencies(stereo_vision ${dependencies})
 
+add_executable(feature_detector
+  src/feature_detector.cpp
+)
+ament_target_dependencies(feature_detector ${dependencies})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
@@ -71,6 +76,7 @@ install(PROGRAMS
   ${PROJECT_NAME}/undistort_image.py
   ${PROJECT_NAME}/image_processing.py
   ${PROJECT_NAME}/stereo_vision.py
+  ${PROJECT_NAME}/feature_detector.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
