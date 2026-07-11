@@ -17,7 +17,7 @@ OpticalFlow::OpticalFlow(const std::string & name)
   const auto sensor_data_qos = rclcpp::SensorDataQoS().get_rmw_qos_profile();
 
   image_sub_.subscribe(
-    this, "left_camera/image_raw", hints.getTransport(), sensor_data_qos);
+    this, "left_camera/image_rect", hints.getTransport(), sensor_data_qos);
   info_sub_.subscribe(this, "left_camera/camera_info", sensor_data_qos);
 
   matches_pub_ =
