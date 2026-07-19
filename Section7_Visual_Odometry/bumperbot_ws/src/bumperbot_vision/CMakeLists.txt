@@ -58,6 +58,11 @@ add_executable(feature_detector
 )
 ament_target_dependencies(feature_detector ${dependencies})
 
+add_executable(optical_flow
+  src/optical_flow.cpp
+)
+ament_target_dependencies(optical_flow ${dependencies})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
@@ -69,7 +74,14 @@ install(TARGETS
   undistort_image
   image_processing
   stereo_vision
+  feature_detector
+  optical_flow
   DESTINATION lib/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY launch config
+  DESTINATION share/${PROJECT_NAME}
 )
 
 install(PROGRAMS
@@ -77,6 +89,7 @@ install(PROGRAMS
   ${PROJECT_NAME}/image_processing.py
   ${PROJECT_NAME}/stereo_vision.py
   ${PROJECT_NAME}/feature_detector.py
+  ${PROJECT_NAME}/optical_flow.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

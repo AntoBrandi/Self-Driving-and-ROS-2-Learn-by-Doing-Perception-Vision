@@ -111,23 +111,17 @@ void OpticalFlow::imageCallback(
 }
 
 void OpticalFlow::estimatePose(
-  const std::vector<cv::Point2f> & curr_points,
-  const std::vector<cv::Point2f> & prev_points,
+  const std::vector<cv::Point2f> & points_2,
+  const std::vector<cv::Point2f> & points_1,
   cv::Mat & R, cv::Mat & t)
 {
-  if (curr_points.size() < 5) {
-    RCLCPP_WARN(get_logger(), "Not enough points to estimate pose.");
-    return;
-  }
-
   // Calculate the Essential Matrix
-  cv::Mat essential_matrix = cv::findEssentialMat(prev_points, curr_points, K_);
-  if (essential_matrix.empty() || essential_matrix.rows != 3 || essential_matrix.cols != 3) {
-    RCLCPP_WARN(get_logger(), "Failed to compute Essential Matrix.");
-    return;
-  }
-
-  cv::recoverPose(essential_matrix, prev_points, curr_points, K_, R, t);
+  cv::Mat essential_matrix = cv::findEssentialMat(points_1, points_2, K_);
+  
+  // Calculate the Homography Matrix
+  cv::Mat homography_matrix;
+  homography_matrix = cv::findHomography(points_1, points_2, cv::RANSAC, 3);
+  cv::recoverPose(essential_matrix, points_1, points_2, K_, R, t);
 }
 }  // namespace bumperbot_vision
 

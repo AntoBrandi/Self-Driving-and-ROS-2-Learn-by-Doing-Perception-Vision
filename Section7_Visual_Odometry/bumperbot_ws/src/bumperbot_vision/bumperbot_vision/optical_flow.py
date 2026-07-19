@@ -104,19 +104,17 @@ class OpticalFlow(Node):
             self.prev_points = None
 
     def estimatePose(self, curr_points, prev_points):
-        if len(curr_points) < 5:
-            return None, None
-
-        pts1 = np.array(prev_points, dtype=np.float32)
-        pts2 = np.array(curr_points, dtype=np.float32)
+        points_1 = np.array(prev_points, dtype=np.float32)
+        points_2 = np.array(curr_points, dtype=np.float32)
 
         # Calculate the Essential Matrix
-        essential_matrix, _ = cv2.findEssentialMat(pts1, pts2, self.K)
-        if essential_matrix is None or essential_matrix.shape != (3, 3):
-            return None, None
+        essential_matrix, _ = cv2.findEssentialMat(points_1, points_2, self.K)
+
+        # Calculate the Homography Matrix
+        homography_matrix, _ = cv2.findHomography(points_1, points_2, cv2.RANSAC, 3)
         
         # Recover Pose
-        _, R, t, _ = cv2.recoverPose(essential_matrix, pts1, pts2, self.K)
+        _, R, t, _ = cv2.recoverPose(essential_matrix, points_1, points_2, self.K)
         return R, t
 
 def main(args=None):
