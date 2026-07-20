@@ -18,10 +18,18 @@
   <depend>point_cloud_transport_plugins</depend>
   <depend>message_filters</depend>
   <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>tf2_ros</depend>
   <depend>cv_bridge</depend>
   <depend>libopencv-dev</depend>
   <depend>image_geometry</depend>
+  <depend>bumperbot_msgs</depend>
+
   <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>rtabmap_odom</exec_depend>
+  <exec_depend>imu_filter_madgwick</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

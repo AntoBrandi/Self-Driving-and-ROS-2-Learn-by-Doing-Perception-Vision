@@ -21,6 +21,9 @@
   <depend>cv_bridge</depend>
   <depend>libopencv-dev</depend>
   <depend>image_geometry</depend>
+
+  <exec_depend>rtabmap_odom</exec_depend>
+  <exec_depend>imu_filter_madgwick</exec_depend>
   <exec_depend>python3-opencv</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
