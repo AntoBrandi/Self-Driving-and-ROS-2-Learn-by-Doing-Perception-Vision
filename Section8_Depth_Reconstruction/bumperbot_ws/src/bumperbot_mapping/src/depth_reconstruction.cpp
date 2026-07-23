@@ -84,7 +84,7 @@ void DepthReconstruction::cloudCallback(const sensor_msgs::msg::PointCloud2::Con
     octree_->updateInnerOccupancy();
     octomap_msgs::msg::Octomap octomap_msg;
     octomap_msgs::fullMapToMsg(*octree_, octomap_msg);
-    octomap_msg.header.frame_id = "map";
+    octomap_msg.header.frame_id = "odom";
     octomap_msg.header.stamp = now();
     octomap_pub_->publish(octomap_msg);
 }

@@ -12,6 +12,8 @@ find_package(image_transport REQUIRED)
 find_package(image_transport_plugins REQUIRED)
 find_package(point_cloud_transport REQUIRED)
 find_package(point_cloud_transport_plugins REQUIRED)
+find_package(pcl_ros REQUIRED)
+find_package(pcl_conversions REQUIRED)
 find_package(message_filters REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
@@ -21,6 +23,8 @@ find_package(std_srvs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_geometry REQUIRED)
 find_package(OpenCV REQUIRED)
+
+find_package(PCL REQUIRED COMPONENTS common filters)
 
 set(dependencies
   rclcpp
@@ -37,6 +41,8 @@ set(dependencies
   cv_bridge
   image_geometry
   OpenCV
+  pcl_ros
+  pcl_conversions
 )
 
 ament_python_install_package(${PROJECT_NAME})
@@ -71,6 +77,11 @@ add_executable(optical_flow
 )
 ament_target_dependencies(optical_flow ${dependencies})
 
+add_executable(point_cloud_processing src/point_cloud_processing.cpp)
+ament_target_dependencies(point_cloud_processing ${dependencies})
+target_include_directories(point_cloud_processing PUBLIC ${PCL_INCLUDE_DIRS})
+target_link_libraries(point_cloud_processing ${PCL_LIBRARIES})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
@@ -84,6 +95,7 @@ install(TARGETS
   stereo_vision
   feature_detector
   optical_flow
+  point_cloud_processing
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -98,6 +110,7 @@ install(PROGRAMS
   ${PROJECT_NAME}/stereo_vision.py
   ${PROJECT_NAME}/feature_detector.py
   ${PROJECT_NAME}/optical_flow.py
+  ${PROJECT_NAME}/point_cloud_processing.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

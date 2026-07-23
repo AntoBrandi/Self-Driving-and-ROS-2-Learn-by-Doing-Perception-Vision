@@ -101,7 +101,7 @@ class DepthReconstruction(Node):
         self.octree_.updateInnerOccupancy()
 
         octomap_msg = Octomap()
-        octomap_msg.header.frame_id = "map"
+        octomap_msg.header.frame_id = "odom"
         octomap_msg.header.stamp = self.get_clock().now().to_msg()
         octomap_msg.binary = True
         octomap_msg.id = "OcTree"
