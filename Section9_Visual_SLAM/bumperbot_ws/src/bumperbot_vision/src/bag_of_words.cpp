@@ -26,7 +26,7 @@ BagOfWords::BagOfWords(const std::string & name)
   transform_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
 
   image_sub_.subscribe(
-    this, "left_camera/image_raw", hints.getTransport(), sensor_data_qos);
+    this, "left_camera/image_rect", hints.getTransport(), sensor_data_qos);
   info_sub_.subscribe(this, "left_camera/camera_info", sensor_data_qos);
 
   detector_ = cv::ORB::create();

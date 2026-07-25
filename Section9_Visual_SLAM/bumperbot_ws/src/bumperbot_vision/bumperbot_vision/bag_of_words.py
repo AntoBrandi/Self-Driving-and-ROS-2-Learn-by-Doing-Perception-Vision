@@ -39,7 +39,7 @@ class BagOfWords(Node):
 
         self.bridge = CvBridge()
 
-        self.image_sub = message_filters.Subscriber(self, Image, "left_camera/image_raw")
+        self.image_sub = message_filters.Subscriber(self, Image, "left_camera/image_rect")
         self.info_sub = message_filters.Subscriber(self, CameraInfo, "left_camera/camera_info")
         
         self.approx_sync = message_filters.ApproximateTimeSynchronizer(
@@ -139,7 +139,7 @@ class BagOfWords(Node):
             if not self.build_vocabulary_and_database():
                 response.success = False
                 response.message = "Failed to build vocabulary. Cannot save database."
-                rclpy.error(self.get_logger(), response.message)
+                self.get_logger().error(response.message)
                 return response
 
         try:
@@ -201,7 +201,7 @@ class BagOfWords(Node):
         except Exception as e:
             response.success = False
             response.message = f"Failed to load database: {str(e)}"
-            rclpy.error(self.get_logger(), response.message)
+            self.get_logger().error(response.message)
             
         return response
 
