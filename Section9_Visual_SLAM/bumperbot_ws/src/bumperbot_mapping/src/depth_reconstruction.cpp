@@ -23,7 +23,7 @@ void DepthReconstruction::initialize()
 {
     pct_ = std::make_shared<point_cloud_transport::PointCloudTransport>(shared_from_this());
     cloud_sub_ = pct_->subscribe(
-        "camera/points", 10,
+        "point_cloud", 10,
         std::bind(&DepthReconstruction::cloudCallback, this, std::placeholders::_1));
     merged_cloud_pub_ = pct_->advertise("merged_cloud", 10);
 

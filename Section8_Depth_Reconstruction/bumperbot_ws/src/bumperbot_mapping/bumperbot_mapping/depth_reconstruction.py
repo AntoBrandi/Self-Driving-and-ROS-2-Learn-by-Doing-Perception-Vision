@@ -35,7 +35,7 @@ class DepthReconstruction(Node):
 
         # No point_cloud_transport in Python: plain pub / sub on PointCloud2
         self.cloud_sub_ = self.create_subscription(
-            PointCloud2, "camera/points", self.cloud_callback, 10)
+            PointCloud2, "point_cloud", self.cloud_callback, 10)
         self.merged_cloud_pub_ = self.create_publisher(
             PointCloud2, "merged_cloud", 10)
         self.octomap_pub_ = self.create_publisher(

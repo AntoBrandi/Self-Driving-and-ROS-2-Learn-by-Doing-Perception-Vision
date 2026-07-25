@@ -47,6 +47,7 @@ void StereoVision::imageCallback(
 {
   cv::Mat left = cv_bridge::toCvCopy(left_image_msg, left_image_msg->encoding)->image;
   cv::Mat right = cv_bridge::toCvCopy(right_image_msg, right_image_msg->encoding)->image;
+  cv::Mat left_color = cv_bridge::toCvCopy(left_image_msg, "bgr8")->image;
   cv::Ptr<cv::StereoSGBM> sgbm = cv::StereoSGBM::create(
     sgbm_params_.min_disparity, sgbm_params_.num_disparities, sgbm_params_.block_size,
     sgbm_params_.p1, sgbm_params_.p2, sgbm_params_.disp12_max_diff, sgbm_params_.pre_filter_cap,
@@ -79,13 +80,13 @@ void StereoVision::imageCallback(
   modifier.resize(left.rows * left.cols);
   modifier.setPointCloud2Fields(
     4, "x", 1, sensor_msgs::msg::PointField::FLOAT32, "y", 1, sensor_msgs::msg::PointField::FLOAT32,
-    "z", 1, sensor_msgs::msg::PointField::FLOAT32, "intensity", 1,
+    "z", 1, sensor_msgs::msg::PointField::FLOAT32, "rgb", 1,
     sensor_msgs::msg::PointField::FLOAT32);
 
   sensor_msgs::PointCloud2Iterator<float> iter_x(pointcloud_msg, "x");
   sensor_msgs::PointCloud2Iterator<float> iter_y(pointcloud_msg, "y");
   sensor_msgs::PointCloud2Iterator<float> iter_z(pointcloud_msg, "z");
-  sensor_msgs::PointCloud2Iterator<float> iter_intensity(pointcloud_msg, "intensity");
+  sensor_msgs::PointCloud2Iterator<float> iter_rgb(pointcloud_msg, "rgb");
 
   for (int v = 0; v < left.rows; v++) {
     for (int u = 0; u < left.cols; u++) {
@@ -99,11 +100,16 @@ void StereoVision::imageCallback(
       *iter_x = x * depth;
       *iter_y = y * depth;
       *iter_z = depth;
-      *iter_intensity = left.at<uchar>(v, u) / 255.0;
+      const cv::Vec3b & bgr = left_color.at<cv::Vec3b>(v, u);
+      uint32_t rgb_packed = (static_cast<uint32_t>(bgr[2]) << 16) |  // R
+                            (static_cast<uint32_t>(bgr[1]) << 8)  |  // G
+                            (static_cast<uint32_t>(bgr[0]));         // B
+      *iter_rgb = *reinterpret_cast<float*>(&rgb_packed);
+
       ++iter_x;
       ++iter_y;
       ++iter_z;
-      ++iter_intensity;
+      ++iter_rgb;
     }
   }
 

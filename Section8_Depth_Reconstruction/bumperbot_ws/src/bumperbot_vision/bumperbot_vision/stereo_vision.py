@@ -58,6 +58,7 @@ class StereoVision(Node):
         """
         left_img = self.bridge.imgmsg_to_cv2(left_img_msg, desired_encoding="mono8")
         right_img = self.bridge.imgmsg_to_cv2(right_img_msg, desired_encoding="mono8")
+        left_color = self.bridge.imgmsg_to_cv2(left_img_msg, desired_encoding="bgr8")
 
         sgbm = cv2.StereoSGBM_create(
             minDisparity=0,
@@ -72,7 +73,7 @@ class StereoVision(Node):
             speckleRange=32,
             mode=cv2.STEREO_SGBM_MODE_SGBM
         )
-        disparity_sgbm = sgbm.compute(left_img_msg, right_img_msg)
+        disparity_sgbm = sgbm.compute(left_img, right_img)
 
         disparity = disparity_sgbm.astype(np.float32) / 16.0
         normalized_disparity = cv2.normalize(
@@ -101,19 +102,24 @@ class StereoVision(Node):
         u_valid = u[mask]
         v_valid = v[mask]
         d_valid = disparity[mask]
-        intensity_valid = left_img[mask]
+        colors_valid = left_color[mask]
 
         z = (fx * baseline) / d_valid
         x = (u_valid - cx) * z / fx
         y = (v_valid - cy) * z / fy
-        intensity = intensity_valid.astype(np.float32) / 255.0
-        points = np.stack([x, y, z, intensity], axis=-1)
+        r = colors_valid[:, 2].astype(np.uint32)
+        g = colors_valid[:, 1].astype(np.uint32)
+        b = colors_valid[:, 0].astype(np.uint32)
+        rgb_uint = (r << 16) | (g << 8) | b
+        rgb_float = rgb_uint.view(np.float32)
+
+        points = np.stack([x, y, z, rgb_float], axis=-1)
 
         fields = [
             PointField(name='x', offset=0, datatype=PointField.FLOAT32, count=1),
             PointField(name='y', offset=4, datatype=PointField.FLOAT32, count=1),
             PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1),
-            PointField(name='intensity', offset=12, datatype=PointField.FLOAT32, count=1),
+            PointField(name='rgb', offset=12, datatype=PointField.FLOAT32, count=1),
         ]
 
         pc_msg = pc2.create_cloud(left_img_msg.header, fields, points)
