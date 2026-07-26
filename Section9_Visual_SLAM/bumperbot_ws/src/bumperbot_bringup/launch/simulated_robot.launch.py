@@ -1,6 +1,6 @@
 import os
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, GroupAction
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -9,9 +9,15 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     use_slam = LaunchConfiguration("use_slam")
+    use_visual = LaunchConfiguration("use_visual")
 
     use_slam_arg = DeclareLaunchArgument(
         "use_slam",
+        default_value="false"
+    )
+
+    use_visual_arg = DeclareLaunchArgument(
+        "use_visual",
         default_value="false"
     )
 
@@ -64,6 +70,28 @@ def generate_launch_description():
         condition=IfCondition(use_slam)
     )
 
+    slam = GroupAction(
+        condition=IfCondition(use_slam),
+        actions=[
+            IncludeLaunchDescription(
+                os.path.join(
+                    get_package_share_directory("bumperbot_mapping"),
+                    "launch",
+                    "slam.launch.py"
+                ),
+                condition=UnlessCondition(use_visual)
+            ),
+            IncludeLaunchDescription(
+                os.path.join(
+                    get_package_share_directory("bumperbot_mapping"),
+                    "launch",
+                    "visual_slam.launch.py"
+                ),
+                condition=IfCondition(use_visual)
+            ),
+        ]
+    )
+
     navigation = IncludeLaunchDescription(
         os.path.join(
             get_package_share_directory("bumperbot_navigation"),
@@ -87,6 +115,7 @@ def generate_launch_description():
     
     return LaunchDescription([
         use_slam_arg,
+        use_visual_arg,
         gazebo,
         controller,
         joystick,
