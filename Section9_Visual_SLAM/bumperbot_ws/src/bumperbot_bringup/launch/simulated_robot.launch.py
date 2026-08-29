@@ -61,15 +61,6 @@ def generate_launch_description():
         condition=UnlessCondition(use_slam)
     )
 
-    slam = IncludeLaunchDescription(
-        os.path.join(
-            get_package_share_directory("bumperbot_mapping"),
-            "launch",
-            "slam.launch.py"
-        ),
-        condition=IfCondition(use_slam)
-    )
-
     slam = GroupAction(
         condition=IfCondition(use_slam),
         actions=[
