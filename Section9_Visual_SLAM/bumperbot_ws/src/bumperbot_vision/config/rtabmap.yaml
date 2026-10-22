@@ -1,6 +1,7 @@
 stereo_odometry:
   ros__parameters:
     approx_sync: true
+    qos: 2
     frame_id: base_footprint
     odom_frame_id: odom
     publish_tf: true
