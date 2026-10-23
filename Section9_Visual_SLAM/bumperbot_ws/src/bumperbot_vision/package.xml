@@ -28,7 +28,6 @@
   <depend>cv_bridge</depend>
   <depend>libopencv-dev</depend>
   <depend>image_geometry</depend>
-  <depend>bumperbot_msgs</depend>
 
   <exec_depend>python3-opencv</exec_depend>
   <exec_depend>rtabmap_odom</exec_depend>
